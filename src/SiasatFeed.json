@@ -1,0 +1,58 @@
+[
+    {
+        "id": "1",
+        "itemname": "Samsung S10",
+        "price": "$1400",
+        "stock": "23",
+        "owner":"Jhon",
+        "ratting": "4.3",
+        "description": "This product is Genuin item and has been tested by our users. The feedback we get from our tester inspired us and we are here to promote this project infront of you. Please feel free to buy this from our app",
+        "category": "Mobile Phones",
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTfjjXfinbci2OJBCqi0kR2Wik-SkhcMDhJomdjyScKhuAipCCo"
+    },
+    {
+        "id": "2",
+        "itemname": "Iphone X",
+        "price": "$1600",
+        "stock": "23",
+        "owner":"Adam",
+        "ratting": "4.3",
+        "description": "This product is Genuin item and has been tested by our users. The feedback we get from our tester inspired us and we are here to promote this project infront of you. Please feel free to buy this from our app",
+        "category": "Mobile Phones",
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQpYHKmZvBBAn6XNUfRly61Zug9tnUUm0QYE9HfCrmPZQuxtYzG"
+    },
+    {
+        "id": "3",
+        "itemname": "Levis Shirt",
+        "price": "$300",
+        "stock": "23",
+        "owner":"Alex",
+        "ratting": "4.3",
+        "description": "This product is Genuin item and has been tested by our users. The feedback we get from our tester inspired us and we are here to promote this project infront of you. Please feel free to buy this from our app",
+        "category": "Garments",
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTctMd8zzteTCvrJw-hid03Dl5UMe0gpCd5R1HSvC04dN0ucKFr"
+    },
+    {
+        "id": "4",
+        "itemname": "Levis Pent",
+        "price": "$550",
+        "stock": "23",
+        "owner":"Bostom",
+        "ratting": "4.3",
+        "description": "This product is Genuin item and has been tested by our users. The feedback we get from our tester inspired us and we are here to promote this project infront of you. Please feel free to buy this from our app",
+        "category": "Garments",
+        "image": "https://i.ebayimg.com/thumbs/images/g/YvgAAOSwv0dcAbTx/s-l225.jpg"
+    },
+    {
+        "id": "5",
+        "itemname": "Ray Ben Glasses",
+        "price": "$200",
+        "stock": "23",
+        "owner":"Ali",
+        "ratting": "4.3",
+        "description": "This product is Genuin item and has been tested by our users. The feedback we get from our tester inspired us and we are here to promote this project infront of you. Please feel free to buy this from our app",
+        "category": "Glasses",
+        "image": "https://cdn.shopify.com/s/files/1/2989/4628/products/3016-brightblackgray-logo-box-3016-clubmaster-ray-ben-sunglasses-with-logo-and-original-box-brand-designer-2787824959536_300x300.jpg?v=1554302255"
+    }
+   
+]
