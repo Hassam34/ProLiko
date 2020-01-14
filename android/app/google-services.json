@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "398714744822",
+    "firebase_url": "https://proliko-97dc7.firebaseio.com",
+    "project_id": "proliko-97dc7",
+    "storage_bucket": "proliko-97dc7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:398714744822:android:1da11cf4c0d96dcc19e1d7",
+        "android_client_info": {
+          "package_name": "com.proliko"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "398714744822-mdphd3ckvekbff72c5dmroe47p392kt0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbCwTq_iZl48c1534bCSdtYq7D3T39Gho"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "398714744822-mdphd3ckvekbff72c5dmroe47p392kt0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

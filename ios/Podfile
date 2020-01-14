@@ -38,6 +38,10 @@ target 'proliko' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  pod 'RNFirebase', :path => '../node_modules/react-native-firebase'
+
+  pod 'RNGoogleSignin', :path => '../node_modules/@react-native-community/google-signin'
+
   target 'prolikoTests' do
     inherit! :search_paths
     # Pods for testing

@@ -2,6 +2,8 @@ import React from 'react';
 import Login from '../Login';
 // import Dashboard from '../Dashboard';
 import Home from '../Screen/Home';
+import Cart from '../Screen/Cart';
+
 // import Search from '../Search';
 // import Timeline from '../Timeline';
 // import HelpSign from '../HelpSign';
@@ -17,21 +19,29 @@ import {
 
 
 //Tab Navigator
-// const tabOfApp = createBottomTabNavigator({
-//     Home,
-//     Search,
-//     Timeline
-// },
-//     {
-//         navigationOptions: ({ navigation }) => {
-//             const { routeName } = navigation.state.routes[navigation.state.index];
-//             return {
-//                 header:null
-//             }
-//         }
-//     }
-//     )
-// //const TabAppContainer=createAppContainer(tabOfApp);
+const tabOfApp = createBottomTabNavigator({
+    Home,
+    Cart
+    // Timeline
+},
+    { tabBarOptions: {
+        activeTintColor: '#e91e63',
+        labelStyle: {
+          fontSize: 12,
+        },
+        style: {
+        //   backgroundColor: 'blue',
+        },
+      },
+        navigationOptions: ({ navigation }) => {
+            const { routeName } = navigation.state.routes[navigation.state.index];
+            return {
+                header:null
+            }
+        }
+    }
+    )
+//const TabAppContainer=createAppContainer(tabOfApp);
 
 // //Stack Navigator
 // const stackShowingTabs = createStackNavigator({
@@ -66,7 +76,7 @@ import {
 const switchWelcomeToLogin = createSwitchNavigator({
     // Welcome: { screen: Welcome },
     Login: { screen: Login },
-    Home:{screen: Home}
+    Home:{screen: tabOfApp}
     // EandPSignin:{screen:EandPSignin},
     // HelpSign:{screen:HelpSign}
 
