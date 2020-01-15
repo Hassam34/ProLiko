@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Image, Linking, StyleSheet, TextInput, TouchableOpacity, Dimensions, KeyboardAvoidingView, Picker, AsyncStorage } from 'react-native';
-import { Button, CardSection } from './components/common';
+import { Button, CardSection, Spinner } from './components/common';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
 import { GoogleSignin, GoogleSigninButton } from '@react-native-community/google-signin';
@@ -16,7 +16,7 @@ class Login extends React.Component {
             header: null
         }
     }
-    state = { stateLanguage: '', userInfo: '', loggedIn: false }
+    state = { stateLanguage: '', userInfo: '', loggedIn: false, email: '', password: '' }
     componentDidMount() {
         // await AsyncStorage.removeItem('AccessToken');
         this.gettingAsyncData();
@@ -27,21 +27,27 @@ class Login extends React.Component {
             loginHint: '',
             forceConsentPrompt: true,
             accountName: '',
-            iosClientId: 'XXXXXX-krv1hjXXXXXXp51pisuc1104q5XXXXXXe.apps.googleusercontent.com'
+            iosClientId: 'com.googleusercontent.apps.398714744822-eclmh7q39u1jb101govi4dtp07g7j98v'
         });
     }
     gettingAsyncData = async () => {
         console.log("hello hassam ")
         let userId = await AsyncStorage.getItem('AccessToken');
-        console.log("hahaha : ", userId.length)
-        if (userId.length > 10) {
+        let userIdSimple = await AsyncStorage.getItem('AccessTokenSimpleLogin');
+        console.log("hahaha : 1")
+        if (userId ||userIdSimple) {
+            console.log("hahaha : 2")
             this.props.navigation.navigate('Home')
+        }
+        else{
+            console.log("hahaha : 3")
+            this.setState({ loggedIn: true },()=>console.log('I am blalalal'))
         }
     }
     _signIn = async () => {
         console.log("hello")
         try {
-           
+
             await GoogleSignin.hasPlayServices();
 
             const userInfo = await GoogleSignin.signIn();
@@ -49,8 +55,8 @@ class Login extends React.Component {
             console.log("Logged in", userInfo)
             const credential = firebase.auth.GoogleAuthProvider.credential(userInfo.idToken, userInfo.serverAuthCode)
             // login with credential
-             await firebase.auth().signInWithCredential(credential);
-                // console.info(JSON.stringify(currentUser.toJSON()));
+            await firebase.auth().signInWithCredential(credential);
+            // console.info(JSON.stringify(currentUser.toJSON()));
 
             this.props.navigation.navigate('Home')
 
@@ -75,12 +81,47 @@ class Login extends React.Component {
             }
         }
     };
+
+    showSpinner() {
+        if (!this.state.loggedIn) {
+            return (<View style={{ flex: 1 }}>
+                <Spinner />
+            </View>)
+        }
+
+    }
+    handleLogin() {
+        if (this.state.email == '' || this.state.password == '') {
+            alert("Enter valid Data")
+        }
+        else {
+            firebase
+                .auth().signInWithEmailAndPassword(this.state.email, this.state.password)
+                .then((response) => {
+                    this.props.navigation.navigate('Home')
+                    AsyncStorage.setItem('AccessTokenSimpleLogin', response.user.uid);
+                })
+                .catch((error) =>
+                    firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
+                        .then((response) => {
+                            this.props.navigation.navigate('Home')
+                            AsyncStorage.setItem('AccessTokenSimpleLogin', response.user.uid);
+                            alert('New Account is Created')
+                        })
+                        .catch((error) => alert("Your error is :\n" + error))
+                )
+        }
+
+    }
     render() {
         //console.log(WIDTH);
         return (
             <View style={styles.MainContainer}>
-                <View style={styles.backgroundImageStyle}>
-                    {/* <View style={{ alignItem: 'center', flexDirection: 'row', width: 130 }}>
+                {this.showSpinner()}
+                {this.state.loggedIn
+                    &&
+                    <View style={styles.backgroundImageStyle}>
+                        {/* <View style={{ alignItem: 'center', flexDirection: 'row', width: 130 }}>
                         <Picker style={{ paddingBottom: 5, paddingRight: 5, paddingLeft: 5, flex: 2 }}
                             selectedValue={this.state.stateLanguage}
                             onValueChange={value => this.setState({ stateLanguage: value })}
@@ -93,89 +134,96 @@ class Login extends React.Component {
                     </View> */}
 
 
-                    <View >
-                        <Text style={styles.logoStyle}>
-                            ProLiko Amusement
+                        <View >
+                            <Text style={styles.logoStyle}>
+                                ProLiko Amusement
                         </Text>
 
-                        {/* <Image source={require('../src/icons/instaB.png')} style={styles.logoStyle} /> */}
-                    </View>
-                    <View style={{ marginTop: -50 }}>
-                        <View>
-                            <TextInput
-                                placeholder='Phone number, email address or username'
-                                placeholderTextColor={'gray'}
-                                underlineColorAndroid='transparent'
-                                style={styles.inputStyle} />
+                            {/* <Image source={require('../src/icons/instaB.png')} style={styles.logoStyle} /> */}
                         </View>
-                        <View>
-                            <TextInput
-                                secureTextEntry
-                                placeholder='Password'
-                                placeholderTextColor={'gray'}
-                                underlineColorAndroid='transparent'
-                                style={styles.inputStyle} />
+                        <View style={{ marginTop: -50 }}>
+                            <View>
+                                <TextInput
+                                    placeholder='Phone number, email address or username'
+                                    placeholderTextColor={'gray'}
+                                    underlineColorAndroid='transparent'
+                                    onChangeText={email => this.setState({ email })}
+                                    value={this.state.email}
+                                    style={styles.inputStyle} />
+                            </View>
+                            <View>
+                                <TextInput
+                                    secureTextEntry
+                                    placeholder='Password'
+                                    placeholderTextColor={'gray'}
+                                    underlineColorAndroid='transparent'
+                                    onChangeText={password => this.setState({ password })}
+                                    value={this.state.password}
+                                    style={styles.inputStyle} />
+                            </View>
                         </View>
-                    </View>
-                    <CardSection>
-                        {/* <Button onPress={() => this.props.navigation.navigate('Dashboard')}>Log In</Button> */}
-                    </CardSection>
-                    <View style={{ marginTop: 7 }}>
-                        <TouchableOpacity onPress={() => Linking.openURL('https://proliko.com/wp-login.php')} style={{ flexDirection: 'row' }}
-                        //  onPress={() => this.props.navigation.navigate('HelpSign')}
-                        >
+                        <CardSection>
+                            {/* <Button onPress={() => this.props.navigation.navigate('Dashboard')}>Log In</Button> */}
+                        </CardSection>
+                        <View style={{ marginTop: 7 }}>
+                            <TouchableOpacity onPress={() => Linking.openURL('https://proliko.com/wp-login.php')} style={{ flexDirection: 'row' }}
+                            //  onPress={() => this.props.navigation.navigate('HelpSign')}
+                            >
 
-                            <Text style={{ color: 'gray', fontSize: 12 }}>Forgot your Login details?</Text>
-                            <Text style={{ color: 'black', fontSize: 12, fontWeight: 'bold' }}> Get help signing in</Text>
+                                <Text style={{ color: 'gray', fontSize: 12 }}>Forgot your Login details?</Text>
+                                <Text style={{ color: 'black', fontSize: 12, fontWeight: 'bold' }}> Get help signing in</Text>
 
-                        </TouchableOpacity>
-                    </View>
-                    <CardSection>
-                        <TouchableOpacity
-                            onPress={() => this.props.navigation.navigate('Home')}
-                            style={styles.buttonStyle} >
-                            <View style={{ alignSelf: 'center' }}><View >
-                                {/* <Icon
+                            </TouchableOpacity>
+                        </View>
+                        <CardSection>
+                            <TouchableOpacity
+                                onPress={
+                                    () => this.handleLogin()
+                                    // this.props.navigation.navigate('Home')
+                                }
+                                style={styles.buttonStyle} >
+                                <View style={{ alignSelf: 'center' }}><View >
+                                    {/* <Icon
                                     name='facebook-square'
                                     size={22}
                                     color='white'
                                     style={{ height: 25, width: 25, position: 'absolute', marginTop: 10 }} /> */}
-                                <Text style={styles.textStyle}>Login</Text>
-                            </View>
-                            </View>
-                        </TouchableOpacity>
+                                    <Text style={styles.textStyle}>Login</Text>
+                                </View>
+                                </View>
+                            </TouchableOpacity>
 
-                    </CardSection>
-                    <GoogleSigninButton
-                        style={{ width: 192, height: 48 }}
-                        size={GoogleSigninButton.Size.Wide}
-                        color={GoogleSigninButton.Color.Dark}
-                        onPress={this._signIn}
-                        disabled={this.state.isSigninInProgress} />
-                    <View>
-                        <Text style={{ color: 'gray', marginTop: 10 }}>
-                            ------------------------------------OR------------------------------------
+                        </CardSection>
+                        <GoogleSigninButton
+                            style={{ width: 192, height: 48 }}
+                            size={GoogleSigninButton.Size.Wide}
+                            color={GoogleSigninButton.Color.Dark}
+                            onPress={this._signIn}
+                            disabled={this.state.isSigninInProgress} />
+                        <View>
+                            <Text style={{ color: 'gray', marginTop: 10 }}>
+                                ------------------------------------OR------------------------------------
                     </Text>
-                    </View>
-                    <View>
-                        <TouchableOpacity style={{ flexDirection: 'row' }}
-                            //  onPress={() => this.props.navigation.navigate('Welcome')}
-                            onPress={() => Linking.openURL('https://proliko.com/wp-login.php')}
-                        >
-                            <Text style={{ color: 'gray', marginTop: 10, fontSize: 12 }}>
-                                Don't have an account?
+                        </View>
+                        <View>
+                            <TouchableOpacity style={{ flexDirection: 'row' }}
+                                //  onPress={() => this.props.navigation.navigate('Welcome')}
+                                onPress={() => Linking.openURL('https://proliko.com/wp-login.php')}
+                            >
+                                <Text style={{ color: 'gray', marginTop: 10, fontSize: 12 }}>
+                                    Don't have an account?
                     </Text>
-                            <Text style={{ color: 'black', marginTop: 10, fontSize: 12, fontWeight: 'bold' }}> Sign up.</Text>
-                        </TouchableOpacity>
-                    </View>
+                                <Text style={{ color: 'black', marginTop: 10, fontSize: 12, fontWeight: 'bold' }}> Sign up.</Text>
+                            </TouchableOpacity>
+                        </View>
 
-                    <View style={styles.bottomView}>
-                        <Text style={{ color: 'gray', fontSize: 12 }}>
-                            ProLiko rent what you Like
+                        <View style={styles.bottomView}>
+                            <Text style={{ color: 'gray', fontSize: 12 }}>
+                                ProLiko rent what you Like
                     </Text>
+                        </View>
                     </View>
-                </View>
-
+                }
             </View>
 
         );

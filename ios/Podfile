@@ -37,8 +37,8 @@ target 'proliko' do
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
-
-  pod 'RNFirebase', :path => '../node_modules/react-native-firebase'
+  # pod 'Firebase/Core', '~> 6.3.0'
+  pod 'RNFirebase', :path => '../node_modules/react-native-firebase/ios'
 
   pod 'RNGoogleSignin', :path => '../node_modules/@react-native-community/google-signin'
 
