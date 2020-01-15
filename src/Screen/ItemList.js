@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, FlatList, Image, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, Image, TouchableOpacity, AsyncStorage } from 'react-native';
 import { Button, CardSection, Header, Spinner } from '../components/common';
 import Icon from 'react-native-vector-icons/AntDesign';
 
@@ -10,9 +10,53 @@ class ItemList extends React.Component {
             addToCart: false
         }
     }
+    async componentDidMount() {
+        await AsyncStorage.removeItem("itemsInCart");
+        const abc = await AsyncStorage.getItem("itemsInCart");
+
+        console.log('datdtadtatda', JSON.parse(abc))
+
+    }
+    setAsyncStorage = async (item) => {
+        const abc = await AsyncStorage.getItem("itemsInCart");
+        if (this.state.addToCart) {
+            if(abc){
+                await AsyncStorage.getItem("itemsInCart")
+                .then(async(data) => {
+                    
+                    let array = JSON.parse(data)
+                    array.push(item)                    
+                    console.log('Adding array: ',array )
+                    await AsyncStorage.removeItem("itemsInCart");
+                    AsyncStorage.setItem("itemsInCart", JSON.stringify(array))
+                })
+            }
+            else{
+                let array=[]
+                array.push(item)
+                console.log('Adding array: ',array )
+                AsyncStorage.setItem("itemsInCart", JSON.stringify(array))
+            }
+        }
+        else {
+            await AsyncStorage.getItem("itemsInCart")
+                .then(async(data) => {
+                    let arrayData = []
+                    arrayData = JSON.parse(data);
+                    arrayData.map((data, index) => {
+                        if (item.id == data.id) {
+                            arrayData.splice(index,1)
+                        }
+                    })
+                    console.log('Removing Array :', arrayData)
+                    await AsyncStorage.removeItem("itemsInCart");
+                    AsyncStorage.setItem("itemsInCart", JSON.stringify( arrayData))
+                })
+        }
+    }
     render() {
         const { item } = this.props.item
-        console.log(' props are', item)
+        // console.log(' props are', item)
 
 
         return (
@@ -37,20 +81,20 @@ class ItemList extends React.Component {
                     </View>
                     <View style={{ flex: .1 }}>
                         <TouchableOpacity onPress={
-                            () => this.setState({ addToCart: !this.state.addToCart })
+                            () => { this.setState({ addToCart: !this.state.addToCart }, () => this.setAsyncStorage(item.item)) }
                         }>
                             <View>
                                 {this.state.addToCart
                                     ?
-                                    <Icon name='check' size={25} color={'green'} style={{ alignItems: 'center', alignSelf: 'center', }} />
+                                    <View>
+                                        <Icon name='check' size={25} color={'green'} style={{ alignItems: 'center', alignSelf: 'center', }} />
+                                        <Text style={{ fontSize: 10, alignItems: 'center', alignSelf: 'center', fontWeight: "bold", marginTop: 1, color: 'gray' }}>Added</Text>
+                                    </View>
                                     :
-                                    <Icon name='shoppingcart' size={25} color={'gray'} style={{ alignItems: 'center', alignSelf: 'center', }} />
-                                }
-                                {this.state.addToCart
-                                    ?
-                                    <Text style={{ fontSize: 10, alignItems: 'center', alignSelf: 'center', fontWeight: "bold", marginTop: 1, color: 'gray' }}>Added</Text>
-                                    :
-                                    <Text style={{ fontSize: 10, alignItems: 'center', alignSelf: 'center', fontWeight: "bold", marginTop: 1, color: 'gray' }}>Add</Text>
+                                    <View>
+                                        <Icon name='shoppingcart' size={25} color={'gray'} style={{ alignItems: 'center', alignSelf: 'center', }} />
+                                        <Text style={{ fontSize: 10, alignItems: 'center', alignSelf: 'center', fontWeight: "bold", marginTop: 1, color: 'gray' }}>Add</Text>
+                                    </View>
                                 }
                             </View>
                         </TouchableOpacity>
