@@ -2,7 +2,10 @@ import React from 'react';
 import Login from '../Login';
 // import Dashboard from '../Dashboard';
 import Home from '../Screen/Home';
-import Cart from '../Screen/Cart';
+import Chat from '../Screen/Chat';
+import Notifications from '../Screen/notification';
+import Profile from "../Screen/profile";
+import Post from "../Screen/Post"
 import { AsyncStorage } from 'react-native';
 // import Search from '../Search';
 // import Timeline from '../Timeline';
@@ -21,12 +24,15 @@ import {
 //Tab Navigator
 const tabOfApp = createBottomTabNavigator({
     Home,
-    Cart
+    Chat,
+    Post,
+    Notifications,
+    Profile
     // Timeline
 },
     {
         tabBarOptions: {
-            activeTintColor: '#e91e63',
+            activeTintColor: '#74C5D5',
             labelStyle: {
                 fontSize: 12,
             },
@@ -76,7 +82,7 @@ const tabOfApp = createBottomTabNavigator({
 //Switch Navigator Now Stack
 const switchWelcomeToLogin = createSwitchNavigator({
     // Welcome: { screen: Welcome },
-    Login: { screen: Login },
+    // Login: { screen: Login },
     Home: { screen: tabOfApp }
     // EandPSignin:{screen:EandPSignin},
     // HelpSign:{screen:HelpSign}
@@ -84,7 +90,7 @@ const switchWelcomeToLogin = createSwitchNavigator({
 },
 )
 
-const SwitchAppContainer = createAppContainer(switchWelcomeToLogin);
+const SwitchAppContainer = createAppContainer(tabOfApp);
 
 export default class Router extends React.Component {
     render() {
